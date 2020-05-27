@@ -33,14 +33,12 @@ public:
     // Your implementation goes here
     fprintf(stdout, "Get request, key=%s\n", req.key.c_str());
     auto* storage = StorageWrapper::GetInstance();
-    string val;
-    if (!storage->Get(req.key, val)) {
+    if (!storage->Get(req.key, _return.val)) {
       fprintf(stderr, "Get fail, key=%s\n", req.key.c_str());
       return;
     }
     fprintf(stdout, "Get request, key=%s, val=%s\n", 
-      req.key.c_str(), val.c_str());
-    _return.val = val;
+      req.key.c_str(), _return.val.c_str());
     return;
   }
 };
