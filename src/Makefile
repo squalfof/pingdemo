@@ -1,7 +1,7 @@
 
 
 CXX=g++
-CXXFLAGS=-Wall -g -fPIC -std=c++11
+CXXFLAGS=-Wall -g -std=c++11
 INC_PATH=./include
 LIB_PATH=./lib
 
@@ -9,7 +9,7 @@ LIB_PATH=./lib
 #LIBS=-L./ -L${LIB_PATH}/rocksdb
 THRIFT_PATH=./thrift
 
-OBJS := ServQuery.o StorageWrapper.o FileWrapper.o Scheduler.o 
+OBJS := ServQuery.o Ingester.o CacheReader.o Scheduler.o 
 THRIFT_OBJS := $(THRIFT_PATH)/CacheService.o $(THRIFT_PATH)/cache_constants.o $(THRIFT_PATH)/cache_types.o
 
 $(OBJS): %.o : %.cc
@@ -21,7 +21,7 @@ $(THRIFT_OBJS): $(THRIFT_PATH)/%.o : $(THRIFT_PATH)/gen-cpp/%.cpp
 all: server
 
 server: main.o $(OBJS) $(THRIFT_OBJS)
-	$(CXX) $(CXXFLAGS) -o ping-server main.o $(OBJS) $(THRIFT_OBJS) $(LIBS) -lrocksdb -lthrift
+	$(CXX) $(CXXFLAGS) -o ping-server main.o $(OBJS) $(THRIFT_OBJS) $(LIBS) -lrocksdb -lthrift -lthriftz -lthriftc
 
 clean:
 	rm -rf ping-server main.o $(OBJS)

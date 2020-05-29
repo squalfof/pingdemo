@@ -15,7 +15,7 @@
 
 #include "basic.h"
 #include "ServQuery.h"
-#include "StorageWrapper.h"
+#include "CacheReader.h"
 
 using namespace apache::thrift;
 using namespace apache::thrift::concurrency;
@@ -32,7 +32,7 @@ public:
   void Get(GetResponse& _return, const int32_t logid, const GetRequest& req) {
     // Your implementation goes here
     fprintf(stdout, "Get request, key=%s\n", req.key.c_str());
-    auto* storage = StorageWrapper::GetInstance();
+    auto* storage = CacheReader::GetInstance();
     if (!storage->Get(req.key, _return.val)) {
       fprintf(stderr, "Get fail, key=%s\n", req.key.c_str());
       return;
@@ -54,8 +54,8 @@ void StartServQuery() {
   TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
   server.serve();
 
-  // Fail to compile on Mac
   /*
+  // Fail to compile on Mac
   // using thread pool with maximum 150 threads to handle incoming requests
   boost::shared_ptr<ThreadManager> threadManager
         = ThreadManager::newSimpleThreadManager(150);
